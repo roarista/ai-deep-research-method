@@ -1,0 +1,5 @@
+council-out/
+my-research/
+*.err
+.DS_Store
+__pycache__/
