@@ -1,6 +1,6 @@
-# Architect → Renderer file handoff: format priority (first FULL-method research pass)
+# Architect → Renderer file handoff: format priority (worked HEAVY-tier example)
 
-Date: 2026-05-19. Method: `research/RESEARCH_METHOD.md` (FULL tier). Tooling: WebSearch breadth + headless browser-harness depth. Stop criterion met at ~18 tool calls, 8+ independent sources.
+Date: 2026-05-19. Method: `METHOD.md` (HEAVY tier). Tooling: WebSearch breadth + headless browser-harness depth. Stop criterion met at ~18 tool calls, 8+ independent sources.
 
 This is the first re-research pass under the new method, replacing assumption-based format priority with cited evidence.
 

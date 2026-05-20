@@ -1,23 +1,26 @@
 # Pre-Research Plan — <short title>
 
-> FULL tier only. The highest-leverage step: decide exactly what to look for and where, BEFORE any agent runs. A bad plan multiplied across N parallel agents wastes N× the compute. (METHOD.md §1.5)
+> HEAVY tier. The highest-leverage step: decide what to look for and where, split the question into distinct angles, and write the harness each agent gets — all BEFORE any agent runs. A bad plan multiplied across N parallel agents wastes N× the compute. (METHOD.md §1.5)
 >
-> Scale effort to size: a STANDARD question gets a 2-minute inline brainstorm; a big FULL lock gets a real planning pass (optionally a cheap "scoping agent" that maps the source landscape first).
+> Scale the brainstorm to the question. For a big lock, optionally fan out a cheap throwaway "scoping agent" first that maps the source landscape and reports which sites/forums/repos are worth the real agents' time.
 
 ```
-SUB-QUESTION DECOMPOSITION:  Break the contract's question into N independent sub-questions. N drives agent count.
+ANGLE DECOMPOSITION:  Split the question into N angles — different PARTS and different PERSPECTIVES
+                      (e.g. official-docs / practitioner-reality / contrarian-limitations / cost).
+                      N drives agent count. Angles should overlap as little as possible.
 
-PER SUB-QUESTION:
-  SUB-Q 1: <one sentence>
-    SOURCE MAP:        Named tier-1 sources for THIS sub-q (sites, repos, doc trees, forums) — not "search the web".
-    QUERY SET:         5-10 actual query strings, run through the §2 ladder (authority / filetype / forum / contrarian / synonym).
-    GOOD ANSWER:       The concrete artifact that closes it.
-    AGENT ASSIGNMENT:  Which subagent owns it; what is OUT of its scope.
-  SUB-Q 2: ...
-  SUB-Q 3: ...
+PER ANGLE:
+  ANGLE 1: <one sentence>
+    PERSPECTIVE:   What lens this agent researches from, and why it's distinct from the others.
+    SOURCE MAP:    Named tier-1 sources for THIS angle (sites, repos, doc trees, forums) — not "search the web".
+    QUERY SET:     5-10 actual query strings, run through the §2 ladder (authority / filetype / forum / contrarian / synonym).
+    GOOD ANSWER:   The concrete artifact that closes it.
+    THE HARNESS:   The exact subagent brief this agent gets (subagent-brief.md) — scope, sources, citation rule, bias guard.
+  ANGLE 2: ...
+  ANGLE 3: ...
 
-PARALLELIZATION DECISION:  Fan out (independent sub-qs, different sources) vs. go deep (each query needs the prior answer). (§6)
-COUNCIL PLAN:              Will findings go to an LLM council (§6.5)? If so, what exact decision must the council reach?
+PARALLELIZATION:  Fan out (independent angles) vs. go deep (each query needs the prior answer). (§6)
+COUNCIL PLAN:     The exact decision the council (§6.5) must reach once findings land.
 ```
 
 **Review the plan before launching agents.** Cheap to fix on paper, expensive after fan-out.

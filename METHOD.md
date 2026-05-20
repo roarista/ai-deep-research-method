@@ -8,27 +8,28 @@ A method for getting human-quality research out of AI agents. A living standard:
 
 ---
 
-## 0. Three tiers — pick before you start
+## 0. Two tiers — pick before you start
 
-Not every question deserves the full apparatus. Classify first; over-formalizing a 30-second lookup is its own anti-pattern. **Classify by the number of genuinely independent sub-questions** (different source sets, no dependency between them) — not by gut feel. That keeps the boundary sharp and stops everything sliding into the comfortable middle.
+Not every question deserves the full apparatus, and over-formalizing a 30-second lookup is its own anti-pattern. There are exactly two modes. Classify first.
 
-| Tier | Trigger | Compute | Output |
-|---|---|---|---|
-| **LIGHTWEIGHT** | 1 sub-question, low stakes, re-checkable in a minute | 1 agent, ~3-5 tool calls | One-line answer + URL |
-| **STANDARD** | 2-3 related sub-questions, or a decision that's reversible | 2-3 parallel agents, no pre-research council | Short synthesis markdown |
-| **FULL** | ≥4 independent sub-questions, OR locks an architecture choice / feeds a build | Pre-research stage (§1.5) → parallel agents → LLM council (§6.5) | Cited findings doc + synthesis |
+| Tier | When | What runs |
+|---|---|---|
+| **LIGHT** | A single fact, low stakes, re-checkable in a minute (a version, a license, one API detail). | One agent, ~3-5 tool calls. One-line answer + URL. |
+| **HEAVY** | Anything that shapes a decision, locks a choice, feeds a build — or splits into several independent sub-questions. | The full pipeline: **brainstorm → allocate → dispatch → council** (§1.5 → §6 → §6.5). |
 
-**LIGHTWEIGHT** — one line, then go:
+**LIGHT** — one line, then go:
 ```
 Q: <precise question>  |  DONE WHEN: <stop criterion>  |  SOURCE: <where the authoritative answer lives>
 ```
 Still obeys the non-negotiables: answer carries a URL+location, mark confidence, flag if unverified.
 
-**STANDARD** — fill the scoping contract (§1) lightly, fan out 2-3 agents, merge into a short synthesis. Skip the pre-research council and the post-research LLM council — they're overhead at this size.
+**HEAVY** — the whole apparatus, in order:
+1. **Scope** the question — the research contract (§1).
+2. **Brainstorm the research itself** — the pre-research planning stage (§1.5): decide the sources, the queries, and *how to harness each agent* before any of them run. This is the highest-leverage step.
+3. **Dispatch** multiple agents in parallel (§6), each pointed at a **different part of the question and a different perspective** — not clones running the same search.
+4. **Council** (§6.5): independent models read the same findings and argue to the decision.
 
-**FULL** — the whole apparatus: scoping contract (§1), **pre-research planning (§1.5)**, parallel agents (§6), and **LLM council synthesis (§6.5)**.
-
-**Rule of thumb:** if a wrong answer would cost a wasted build or a bad lock, it's FULL. Reversible and re-checkable, it's LIGHTWEIGHT. Genuinely in between, STANDARD. When unsure between two tiers, pick the higher one — under-scoping is the more expensive error.
+**Rule of thumb:** if a wrong answer would cost a wasted build or a bad lock, it's HEAVY. Reversible and re-checkable in a minute, it's LIGHT. When genuinely unsure, go HEAVY — under-scoping is the more expensive error.
 
 ---
 
@@ -49,26 +50,28 @@ TIME-BOX:              Max tool calls / minutes before returning best-effort wit
 
 "Find a free tool that extracts layer names + entity types from a real DWG without ODA, with a working code example" is a scope. "Research DWG parsing" is not.
 
-## 1.5 Pre-research planning (FULL tier only — spend compute proportional to question size)
+## 1.5 Pre-research brainstorm (HEAVY tier — the highest-leverage step)
 
-The single biggest lever on research quality is what you decide *before any agent runs*. A naive agent searches for "whatever" in "wherever". The fix is to spend deliberate brainpower up front harnessing each agent: telling it *exactly what to look for* and *exactly where to look*. This stage is where that happens. Scale the effort to the question:
+The single biggest lever on research quality is what you decide *before any agent runs*. A naive agent searches for "whatever" in "wherever". The fix is to spend deliberate brainpower up front — a real brainstorming phase — that does three things: **(a)** decide *what* to look for and *where*, **(b)** split the question into distinct angles, and **(c)** write the actual prompt/harness each agent gets so it searches precisely, not vaguely. This stage is where the compute that separates good research from shallow research is spent.
 
-- **One STANDARD-sized question** → a 2-minute brainstorm is enough: name the 3-4 tier-1 sources, the 5 best query strings, and what a good answer looks like. Write it inline, then go.
-- **One big FULL question / a council-worthy lock** → treat the plan itself as work. Run the planning brainstorm with real compute (you may even fan out a short "scoping pass" — one cheap agent whose only job is to map the source landscape and report back which sources/forums/repos are worth the real agents' time). Then write the plan below.
+Scale the brainstorm to the question. For a big, council-worthy lock you can even fan out a short cheap **scoping pass** first — one throwaway agent whose only job is to map the source landscape and report back which sites, forums, and repos are worth the real agents' time. Then write the plan:
 
 ```
 PRE-RESEARCH PLAN
-SUB-QUESTION DECOMPOSITION:  Break the contract's question into N independent sub-questions. N drives agent count.
-PER SUB-QUESTION, NAME:
-  - SOURCE MAP:    The specific tier-1 sources for THIS sub-question (named sites, repos, doc trees, forums) — not "search the web".
-  - QUERY SET:     The 5-10 actual query strings, run through the §2 ladder (authority / filetype / forum / contrarian / synonym).
-  - GOOD ANSWER:   The concrete artifact that closes it.
-  - AGENT ASSIGNMENT: Which subagent owns it; what is OUT of its scope.
-PARALLELIZATION DECISION:    Fan out (independent sub-qs, different sources) vs. go deep (each query needs the prior answer). See §6.
-COUNCIL PLAN:                Will findings go to an LLM council (§6.5)? If so, what's the decision the council must reach?
+ANGLE DECOMPOSITION:  Split the question into N angles — different PARTS and different PERSPECTIVES
+                      (e.g. official-docs angle / practitioner-reality angle / contrarian-limitations angle /
+                      cost angle). N drives agent count. Angles should overlap as little as possible.
+PER ANGLE, NAME:
+  - PERSPECTIVE:    What lens this agent researches from, and why it's distinct from the others.
+  - SOURCE MAP:     The specific tier-1 sources for THIS angle (named sites, repos, doc trees, forums) — not "search the web".
+  - QUERY SET:      The 5-10 actual query strings, run through the §2 ladder (authority / filetype / forum / contrarian / synonym).
+  - GOOD ANSWER:    The concrete artifact that closes it.
+  - THE HARNESS:    The exact subagent brief this agent gets (templates/subagent-brief.md) — scope, sources, citation rule, bias guard.
+PARALLELIZATION:    Fan out (independent angles) vs. go deep (each query needs the prior answer). See §6.
+COUNCIL PLAN:       The exact decision the council (§6.5) must reach once findings land.
 ```
 
-Rule: **the plan is reviewed before agents launch.** A bad plan multiplied across N parallel agents wastes N× the compute. Cheap to fix on paper, expensive to fix after fan-out.
+Rule: **the plan is reviewed before agents launch.** A bad plan multiplied across N parallel agents wastes N× the compute. Cheap to fix on paper, expensive after fan-out.
 
 ## 2. Query design / decomposition
 
@@ -128,7 +131,7 @@ New-evidence threshold: if the latest retrieval is ≥80% overlapping with prior
 
 ## 6. Multi-agent orchestration
 
-**Fan out** (parallel subagents) when the question splits into ≥3 genuinely independent sub-questions with different source sets (e.g. DWG options → ezdxf / APS-hosted / LibreDWG-ODA). **Go deep** with one when each query depends on the prior answer. Premature parallelization orphans findings.
+**Fan out** (parallel subagents) when the question splits into independent angles with different source sets — different *parts* of the question and different *perspectives* on it (e.g. an official-docs agent, a practitioner-forum agent, a contrarian-limitations agent, a cost agent). The goal is coverage and viewpoint diversity, not the same search run N times. **Go deep** with one agent instead when each query depends on the prior answer. Premature parallelization orphans findings.
 
 Subagent brief template:
 ```
@@ -144,7 +147,7 @@ TIME-BOX:       Hard cap.
 
 Merging: collect all FINDINGs → find CONTRADICTS pairs → resolve by source tier (higher wins; same-tier conflict = flag for human) → list GAPS no one covered (follow-up pass, not final answer) → orchestrator synthesis must trace each prose claim back to specific FINDINGs.
 
-## 6.5 LLM council (FULL tier — synthesis by debate, not by merge)
+## 6.5 LLM council (HEAVY tier — synthesis by debate, not by merge)
 
 Mechanical merging (above) resolves *factual* conflicts by source tier. It does **not** stress-test the *interpretation* — whether the findings actually support the decision, what a contrarian reads in the same data, what's being over-claimed. For a question that locks a build or an architecture choice, run a council after the parallel research lands.
 
@@ -161,7 +164,7 @@ OUTPUT:              VERDICT + rationale + the findings you relied on + your sin
 
 Then the orchestrator (or a human) reads the three verdicts: **agreement across three independent models is a strong signal; disagreement localizes exactly where the evidence is thin** — that becomes the next research gap, not a coin-flip. The council never invents facts; it only reasons over the cited findings. If a member needs a fact that isn't in the findings, that's a GAP for a follow-up pass.
 
-Roles can be assigned (writer / auditor / contrarian) or symmetric (all three reach a verdict, then a fourth pass reconciles). The repo ships both as templates. Keep the council for FULL-tier locks only — it's three model-runs of overhead, wasted on a reversible STANDARD question.
+Roles can be assigned (writer / auditor / contrarian) or symmetric (all three reach a verdict, then a fourth pass reconciles). The repo ships both as templates. The council is a HEAVY-tier step only — three model-runs of overhead, wasted on a LIGHT lookup.
 
 ## 7. Anti-patterns → countermeasures
 

@@ -1,6 +1,6 @@
 # Council Brief — <decision>
 
-> FULL tier. Three INDEPENDENT models read the SAME merged findings and argue to the decision. Use genuinely different models (e.g. Claude + Codex + Kimi) so failure modes don't correlate. No model sees another's answer until all are in. (METHOD.md §6.5)
+> HEAVY tier. Three INDEPENDENT models read the SAME merged findings and argue to the decision. Use genuinely different models (e.g. Claude + Codex + Kimi) so failure modes don't correlate. No model sees another's answer until all are in. (METHOD.md §6.5)
 
 ```
 DECISION TO REACH:   The exact call the contract needs (verbatim).

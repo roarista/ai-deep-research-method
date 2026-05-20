@@ -8,12 +8,13 @@ The problem this solves: naive AI research runs one generic query, reads SEO-blo
 
 ## The method in one screen
 
-1. **Classify the question** into a tier (LIGHTWEIGHT / STANDARD / FULL) by how many independent sub-questions it has.
-2. **Scope it** — fill a one-page contract before searching (`templates/scoping-contract.md`).
-3. **Plan the research** (FULL only) — name the exact sources and queries per sub-question *before* any agent runs (`templates/pre-research-plan.md`). This is the highest-leverage step.
-4. **Fan out** parallel subagents, each briefed with a tight scope + citation rule (`templates/subagent-brief.md`).
-5. **Record every claim** in a fixed FINDING shape — no URL, no finding (`templates/finding.md`).
-6. **Convene a council** (FULL only) — three independent models read the same findings and argue to the decision (`templates/council-brief.md`).
+Two tiers, picked up front. **LIGHT** = a single re-checkable fact: one agent, one-line answer + URL, done. **HEAVY** = anything that shapes a decision or splits into several angles — run the full pipeline:
+
+1. **Scope it** — fill a one-page contract before searching (`templates/scoping-contract.md`).
+2. **Brainstorm the research itself** (the highest-leverage step) — decide the sources and queries, split the question into distinct angles/perspectives, and write the exact harness each agent gets, *before* any agent runs (`templates/pre-research-plan.md`).
+3. **Dispatch** parallel subagents, each on a **different part + different perspective**, briefed with a tight scope + citation rule (`templates/subagent-brief.md`).
+4. **Record every claim** in a fixed FINDING shape — no URL, no finding (`templates/finding.md`).
+5. **Convene a council** — three independent models read the same findings and argue to the decision; agreement is signal, disagreement localizes the weak evidence (`templates/council-brief.md`).
 
 Full playbook: **[`METHOD.md`](METHOD.md)**.
 
@@ -30,7 +31,7 @@ These assume you have the relevant CLIs installed (see **Requirements**). They a
 
 - **Breadth search:** any agent with a web-search tool (the method is tool-agnostic; built-in `WebSearch` works).
 - **Depth browsing:** [`browser-harness`](https://github.com/browser-use/browser-harness) + Google Chrome, for reading JS-rendered pages and navigating doc/repo trees structurally. Read-only.
-- **Council (optional but recommended for FULL):** three independent model CLIs so failure modes don't correlate. The reference set is:
+- **Council (recommended for HEAVY):** three independent model CLIs so failure modes don't correlate. The reference set is:
   - **Claude** — [Claude Code](https://claude.com/claude-code) (`claude`)
   - **Codex** — OpenAI Codex CLI (`codex`)
   - **Kimi** — Moonshot Kimi CLI (`kimi`)
@@ -46,12 +47,12 @@ less METHOD.md
 cp templates/scoping-contract.md   my-research/contract.md
 cp templates/pre-research-plan.md  my-research/plan.md
 
-# 3. (FULL tier) launch headless depth-browsing
+# 3. (HEAVY tier) launch headless depth-browsing
 ./scripts/browser-harness-headless.sh start
 
 # 4. ...run your agents, collect FINDINGs into one doc...
 
-# 5. (FULL tier) convene the council on the merged findings
+# 5. (HEAVY tier) convene the council on the merged findings
 ./scripts/run-council.sh my-research/findings.md my-research/council-brief.md
 ```
 
