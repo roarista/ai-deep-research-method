@@ -21,6 +21,19 @@ Two tiers, picked up front. **LIGHT** = a single re-checkable fact: one agent, o
 
 Full playbook: **[`METHOD.md`](METHOD.md)**.
 
+## Why divergent–convergent — and why it works
+
+The hero image up top is the method in one picture: a question **fans out** (the orange node) into many divergent paths, then those paths **pull back together** (the blue node) into one grounded answer. That two-beat rhythm is the whole engine, and it's borrowed directly from how human creativity works.
+
+Cognitive scientists describe creative thinking as exactly these two complementary modes. **Divergent thinking** generates many possibilities, reaches sideways across domains, and tolerates ideas that don't yet make sense — it's the part of you that says *"wait, this is really just a kind of that."* **Convergent thinking** then judges, screens, and narrows toward the one option that actually holds up. Neither mode alone is creative: divergence without convergence is noise, convergence without divergence is the obvious answer everyone already had. Insight lives in the handoff between them.
+
+This method runs those two modes as **two agents with opposite postures** instead of leaving them tangled in one prompt:
+
+- **A high-temperature divergent agent** does the human leap — it *strips the name and states the structure* ("matplotlib isn't a plotting library, it's a renderer that emits clean 2D line drawings — which is what an architectural sketch is"), then asks *whose problem is this already?* and reaches deliberately into unexpected domains (game engines, CNC toolpaths, medical imaging, manga line-art) to find analogy bridges.
+- **A low-temperature convergent agent** does the human discipline — it takes each bridge and asks *does a real tool execute this, does it fit the constraints, does it survive contact with evidence?* — keeping only what's real.
+
+**Why it's so useful:** plain AI research collapses both modes into a single averaged pass, which is why it returns the obvious, the already-indexed, the SEO-blog consensus. Separating them lets the system swing wide *and* land hard — the divergent agent reaches places a keyword search can't (cross-domain analogy, not retrieval), and the convergent agent guarantees those reaches are grounded, not hallucinated. The result is the thing humans are still prized for in research: finding the route nobody in the room had named, then proving it's the right one. The [`examples/`](examples/) directory has a worked case where exactly this surfaced a solution no participant had thought of.
+
 ## What's runnable here (the toolkit)
 
 | Script | What it does |
