@@ -73,6 +73,36 @@ COUNCIL PLAN:       The exact decision the council (§6.5) must reach once findi
 
 Rule: **the plan is reviewed before agents launch.** A bad plan multiplied across N parallel agents wastes N× the compute. Cheap to fix on paper, expensive after fan-out.
 
+## 1.6 Divergent–convergent pass (HEAVY tier — creative recombination, grounded by research)
+
+§1.5 decides where to look. This step decides *what's worth looking for that nobody named yet*. Most real breakthroughs come from re-describing an artifact by its **structure** instead of its **name**, then noticing another domain already solves that structure.
+
+**The core move: strip the name, state the structure.** "X *named*" vs. "X *described structurally*" are often completely different things, and the structural description opens doors the name doesn't.
+
+Worked example: "matplotlib" *named* is a plotting library. Described *structurally* it is **a renderer that emits clean 2D line drawings** — which is what an architectural sketch is, and a pipeline that renders from sketches can already use it. That structural re-description, not a keyword search, opened a CAD-only render route. The divergent leap ("matplotlib output is a sketch, feed it as conditioning") plus the convergent test ("does this tool execute, does it fit cost/license/local-run?") reached an answer no search would surface.
+
+Run two agents with **opposite postures**. Both commission research (see §1.7) — the difference is the *kind* of question they ask, not whether they get to ask.
+
+**Divergent agent (high temperature).**
+- Fed a broad, shallow GROUNDING pass first (R0) so it reasons over real artifacts and their real structure, not imagination. Divergence in a vacuum hallucinates bridges; divergence on grounded facts finds real ones.
+- Moves: (1) **strip the name, state the structure** — "X is really just a Y that does Z", 3–5 per artifact; (2) **whose problem is this already?** — name 2–3 *other domains* that solve that structure, reaching deliberately to adjacent or unexpected ones (game engines, GIS, CNC/CAM toolpaths, photogrammetry, medical imaging, line-art/manga, vector illustration, pre-computer hand rendering); (3) emit **analogy bridges**.
+- It **commissions broad exploratory research at will**: "I think this could work — go see if anything like it exists." It does not run the probe itself (keeps temperature high and context clean); it emits a request, the orchestrator dispatches it (§1.7), and the divergent agent keeps brainstorming with the answer.
+
+**Convergent agent (low temperature).**
+- Takes the bridges and **commissions tight feasibility research**: per bridge, "does a tool execute this, does it actually work, does it fit cost / local-runnable / license?"
+- Scores each on real-match / executable / fits-constraints. Survivors become full HEAVY-tier strands with a §1 contract; the rest are logged, not researched.
+
+Output: a ranked set of strands to research deeply (R2), each already grounded and feasibility-screened.
+
+**Per-junction loop:** R0 grounding (broad, shallow) → D (divergent, exploratory probes) → C (convergent, feasibility probes) → R2 (deep HEAVY-tier research on survivors) → synthesis + council. Research appears three times with three jobs: grounding makes divergence real, feasibility-probing drives convergence, deep verification closes it.
+
+## 1.7 Research orchestration — request-and-dispatch, results to disk
+
+Thinkers don't spawn agents and don't run deep research inline — they **emit research requests**; the orchestrator (depth 0) dispatches a clean-context research agent per request, in parallel where possible, and routes the answer back.
+
+- **Results land on disk, not in the orchestrator's context.** Each research agent writes its FINDINGs to a file and returns ONLY a pointer + one-line status (success / gaps). The orchestrator routes the *pointer* to the requesting thinker; the thinker reads the file directly. The orchestrator never absorbs the full body — this is what keeps its context from bloating across many rounds.
+- **Depth bound stays at 2 (orchestrator → agent).** Research agents do not spawn further; they reach depth via browser-harness, not via more agents. Recursive spawning is rejected on purpose: it explodes cost combinatorially, hides runaway loops and duplicated work from the orchestrator, and degrades citations through lossy summarization at each hop. Request-and-dispatch delivers "thinkers that research at will" with none of that — the thinker still drives, the orchestrator executes and stays observable.
+
 ## 2. Query design / decomposition
 
 Naive agents write one generic query and accept page 1 (SEO blogs, not ground truth). Always run the ladder:
@@ -116,6 +146,10 @@ CONTRADICTS:  Any conflicting finding, or "none found".
 GAPS:         What this does NOT answer that the scope requires.
 SOURCE TIER:  1 docs | 2 code | 3 paper | 4 forum | 5 blog
 ```
+
+**Verification pass (required before a finding becomes a lock).** Even a disciplined HEAVY pass mis-attributes citations. Before any finding feeds an architecture lock or a build, an *independent* agent re-opens each cited URL and confirms the claim actually lives there. Verification is a separate context from the agent that produced the finding (it must not trust the upstream summary). A finding that fails verification drops to UNVERIFIED, not "probably fine".
+
+**Halt on tool failure — never improvise.** If a tool fails mid-pass (browser-harness down, disk full, search returns nothing), the agent **HALTS and REPORTS** the failure. It must not silently fall back to training knowledge or read local project files as a substitute for the web — that contaminates the result with un-cited, possibly-stale "facts" dressed as research. A reported gap is recoverable; a contaminated finding is not.
 
 ## 5. Iteration & stop criteria
 
@@ -192,6 +226,10 @@ What to remove when the pass ends:
 | Stale info | Date-check every versioned claim |
 | Confident gaps | Mark LOW confidence; record as gap for human verification |
 | Disk footprint left behind | Clean browser profile/cache + scratch files after every pass (§6.6) |
+| Mis-attributed citation in a lock | Independent verification pass re-opens every cited URL before a finding becomes a lock (§4) |
+| Improvising on tool failure | HALT and REPORT; never fall back to training knowledge or local files when a tool dies (§4) |
+| Brainstorm with no grounding | Feed the divergent agent an R0 grounding pass first; divergence in a vacuum hallucinates bridges (§1.6) |
+| Recursive agent spawning | Request-and-dispatch at depth 2; thinkers emit requests, orchestrator dispatches, results to disk (§1.7) |
 
 ---
 

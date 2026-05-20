@@ -6,7 +6,7 @@ A battle-tested method for getting **human-quality research out of AI agents** �
 
 The problem this solves: naive AI research runs one generic query, reads SEO-blog snippets, and misses what a human finds in seconds. This method fixes that with **scoped pre-research, an authority-chain search ladder, citation-enforced findings, parallel subagents, and a multi-model "council" that synthesizes by debate** — all of which run on free/local tooling.
 
-> Origin: extracted from a real project where research quality *was* product quality. The included worked example (`examples/`) is the first run under this method — it overturned three assumptions the project had been building on.
+> Origin: extracted from a real project where research quality *was* product quality. The `examples/` directory contains two worked examples: a format-priority HEAVY-tier run that overturned three prior assumptions, and a divergent–convergent case study showing how structural re-description surfaced a route nobody in the conversation had named.
 
 ## The method in one screen
 
@@ -14,9 +14,10 @@ Two tiers, picked up front. **LIGHT** = a single re-checkable fact: one agent, o
 
 1. **Scope it** — fill a one-page contract before searching (`templates/scoping-contract.md`).
 2. **Brainstorm the research itself** (the highest-leverage step) — decide the sources and queries, split the question into distinct angles/perspectives, and write the exact harness each agent gets, *before* any agent runs (`templates/pre-research-plan.md`).
-3. **Dispatch** parallel subagents, each on a **different part + different perspective**, briefed with a tight scope + citation rule (`templates/subagent-brief.md`).
-4. **Record every claim** in a fixed FINDING shape — no URL, no finding (`templates/finding.md`).
-5. **Convene a council** — three independent models read the same findings and argue to the decision; agreement is signal, disagreement localizes the weak evidence (`templates/council-brief.md`).
+3. **Divergent–convergent pass** (optional but high-value for creative/open-ended questions) — a high-temperature divergent agent re-describes artifacts *structurally* to reach analogy bridges across domains, commissions exploratory probes, then a low-temperature convergent agent feasibility-screens the survivors. Both work via **request-and-dispatch**: they emit research requests, the orchestrator spawns clean-context sub-agents, results go to disk, only pointers come back. Depth bound stays at 2 — no recursive spawning (`METHOD.md` §1.6–1.7).
+4. **Dispatch** parallel subagents, each on a **different part + different perspective**, briefed with a tight scope + citation rule (`templates/subagent-brief.md`).
+5. **Record every claim** in a fixed FINDING shape — no URL, no finding (`templates/finding.md`).
+6. **Convene a council** — three independent models read the same findings and argue to the decision; agreement is signal, disagreement localizes the weak evidence (`templates/council-brief.md`).
 
 Full playbook: **[`METHOD.md`](METHOD.md)**.
 
