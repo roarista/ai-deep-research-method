@@ -8,8 +8,13 @@
 #
 # Usage:
 #   ./browser-harness-headless.sh start     # launch headless Chrome
-#   ./browser-harness-headless.sh stop      # kill ONLY this debug instance
+#   ./browser-harness-headless.sh stop      # kill ONLY this debug instance (keeps profile cache)
+#   ./browser-harness-headless.sh clean      # stop AND delete the profile cache — run this AFTER research
 #   ./browser-harness-headless.sh url        # print the BU_CDP_URL to export
+#
+# CLEANUP IS MANDATORY (METHOD.md §6.6): the headless profile accumulates page cache, and any
+# fetched pages / downloaded files pile up on disk. Always `clean` when the research pass is done —
+# leaving profiles around fills the drive over many runs.
 #
 # Then drive it (read-only) from any agent shell:
 #   BU_CDP_URL=http://127.0.0.1:9222 browser-harness <<'PY'
@@ -39,9 +44,24 @@ case "${1:-start}" in
     # Kill ONLY this debug instance by its unique profile path. Never pkill generic 'chrome'.
     pkill -f "$PROFILE" && echo "stopped debug Chrome ($PROFILE)" || echo "nothing to stop"
     ;;
+  clean)
+    # Stop the instance, then delete its profile cache. Run this AFTER every research pass.
+    pkill -f "$PROFILE" 2>/dev/null && echo "stopped debug Chrome ($PROFILE)" || echo "(not running)"
+    sleep 1
+    # Safety: only remove a path that actually looks like our isolated bh profile.
+    case "$PROFILE" in
+      *bh-chrome-profile*)
+        before=$(du -sh "$PROFILE" 2>/dev/null | cut -f1)
+        rm -rf "$PROFILE" && echo "removed profile cache ($PROFILE${before:+, was $before})" ;;
+      *)
+        echo "REFUSING to rm '$PROFILE' — doesn't look like a bh isolated profile. Delete manually if intended." >&2
+        exit 1 ;;
+    esac
+    echo "cleanup done. (Also remove any pages/files your agents saved outside this profile.)"
+    ;;
   url)
     echo "http://127.0.0.1:$PORT"
     ;;
   *)
-    echo "usage: $0 {start|stop|url}" >&2; exit 1 ;;
+    echo "usage: $0 {start|stop|clean|url}" >&2; exit 1 ;;
 esac

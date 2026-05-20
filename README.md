@@ -54,6 +54,9 @@ cp templates/pre-research-plan.md  my-research/plan.md
 
 # 5. (HEAVY tier) convene the council on the merged findings
 ./scripts/run-council.sh my-research/findings.md my-research/council-brief.md
+
+# 6. CLEAN UP — purge the browser profile/cache + scratch files (keep only findings)
+./scripts/browser-harness-headless.sh clean
 ```
 
 ## Credits & acknowledgements

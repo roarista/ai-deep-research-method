@@ -166,6 +166,17 @@ Then the orchestrator (or a human) reads the three verdicts: **agreement across 
 
 Roles can be assigned (writer / auditor / contrarian) or symmetric (all three reach a verdict, then a fourth pass reconciles). The repo ships both as templates. The council is a HEAVY-tier step only — three model-runs of overhead, wasted on a LIGHT lookup.
 
+## 6.6 Cleanup — leave no footprint on disk
+
+Depth-browsing is not free on disk. A headless browser profile accumulates page cache, and any pages an agent saves or files it downloads pile up. Over many research passes this silently fills the drive and taxes memory. **The research pass isn't done until its disk footprint is gone.** Treat this as the closing step of every HEAVY pass, the way you'd close a file handle.
+
+What to remove when the pass ends:
+- The headless browser **profile/cache** — `./scripts/browser-harness-headless.sh clean` (stops the instance and deletes the isolated profile).
+- Any **fetched pages, screenshots, or downloaded files** an agent wrote to scratch/temp during the run.
+- The browser-harness **daemon/sockets** if still alive.
+
+**Keep** only the durable output: the FINDINGs doc, the synthesis, and the council verdicts. The raw retrieval artifacts are reproducible from the queries — they are scratch, not record. A subagent's brief should make cleanup its own responsibility (see the CLEANUP line in the subagent brief), and the orchestrator confirms the footprint is clean before declaring the pass complete.
+
 ## 7. Anti-patterns → countermeasures
 
 | Anti-pattern | Countermeasure |
@@ -180,6 +191,7 @@ Roles can be assigned (writer / auditor / contrarian) or symmetric (all three re
 | Source not explored structurally | Navigate the repo/doc tree directly, don't re-search inside it |
 | Stale info | Date-check every versioned claim |
 | Confident gaps | Mark LOW confidence; record as gap for human verification |
+| Disk footprint left behind | Clean browser profile/cache + scratch files after every pass (§6.6) |
 
 ---
 
@@ -192,6 +204,7 @@ Roles can be assigned (writer / auditor / contrarian) or symmetric (all three re
 5. **Apply stop criteria** — success criterion, new-evidence threshold, time-box.
 6. **Flag contradictions and gaps explicitly** — never resolve silently, never omit gaps.
 7. **Return structured findings, not a narrative** — orchestrator synthesizes; subagent delivers facts.
+8. **Clean up your disk footprint** — purge the browser profile/cache and scratch files; keep only the findings (§6.6).
 
 ---
 

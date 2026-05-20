@@ -12,4 +12,5 @@ CITATION RULE:  Every claim has a URL + location within the page. No URL = omit 
 BIAS GUARD:     Treat options equally. Surface evidence AGAINST prior assumptions FIRST.
 STOP CRITERION: Success criterion met, OR new-evidence threshold (≥80% overlap with prior results), OR time-box. Hard cap 3 retrieval iterations per sub-q.
 TIME-BOX:       <max tool calls>
+CLEANUP:        Before returning, delete YOUR disk footprint — fetched pages, screenshots, downloads, scratch/temp files. Keep only the FINDINGs you report. The raw retrieval is reproducible; don't leave it on the drive. (§6.6)
 ```
