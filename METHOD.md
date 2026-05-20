@@ -1,10 +1,10 @@
-# Research Method — Previz
+# Research Method
 
-Canonical research playbook. Drafted 2026-05-19. This is a living standard: every research subagent is briefed with it, and the project re-researches open questions through it.
+A method for getting human-quality research out of AI agents. A living standard: every research subagent is briefed with it, and open questions are re-researched through it. The DWG/CAD examples below are from the project this was extracted from — read them as concrete illustrations of the moves, not as the subject.
 
-**Why this exists:** progress has been bottlenecked by shallow research. We are not architecture/CAD experts, so research quality *is* product quality. Past failure: subagents ran keyword searches, read snippets, and missed what a human finds in seconds (e.g. real DXF samples were "impossible to find" for agents, trivial for a human). We fixed tooling (headless browser-harness — see `memory/reference_browser_harness_setup.md`). This fixes method.
+**Why this exists:** progress is routinely bottlenecked by shallow research. When you're not a domain expert, research quality *is* output quality. The recurring failure: subagents run keyword searches, read snippets, and miss what a human finds in seconds (e.g. real sample files that were "impossible to find" for an agent, trivial for a human). Fixing it took two things — better tooling (headless browsing) and better method. This is the method.
 
-**Tooling stack (locked):** built-in `WebSearch` for breadth (get the URLs worth visiting) + headless `browser-harness` for depth (read JS-rendered pages, follow links, browse repo/doc trees structurally). Read-only. Avoid Playwright MCP for subagents.
+**Tooling stack:** any web-search tool for breadth (get the URLs worth visiting) + headless [`browser-harness`](https://github.com/browser-use/browser-harness) for depth (read JS-rendered pages, follow links, browse repo/doc trees structurally). Read-only. Avoid Playwright MCP for subagents (main-session-only, floods context).
 
 ---
 
