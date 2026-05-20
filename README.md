@@ -1,4 +1,6 @@
-# Deep Research Method for AI Agents
+# A.I. Deep Research Method
+
+![A.I. Deep Research Method — a scoped question fans out to parallel research agents, each on a different perspective, then converges on a three-model council that debates to a cited conclusion](assets/hero.png)
 
 A battle-tested method for getting **human-quality research out of AI agents** — and a small runnable toolkit to execute it.
 
