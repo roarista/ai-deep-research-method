@@ -151,7 +151,7 @@ Merging: collect all FINDINGs → find CONTRADICTS pairs → resolve by source t
 
 Mechanical merging (above) resolves *factual* conflicts by source tier. It does **not** stress-test the *interpretation* — whether the findings actually support the decision, what a contrarian reads in the same data, what's being over-claimed. For a question that locks a build or an architecture choice, run a council after the parallel research lands.
 
-A council is **three independent models** reading the *same* merged FINDINGs and arguing toward the decision the contract named. Use genuinely different models so the failure modes don't correlate — e.g. **Claude (Opus) + Codex (GPT-5.x) + Kimi (K2)**. Each is briefed identically and independently; no model sees another's answer until all three are in.
+A council is **three independent models** reading the *same* merged FINDINGs and arguing toward the decision the contract named. Use genuinely different models so the failure modes don't correlate — the reference trio is [Claude](https://claude.com/claude-code) + [Codex](https://github.com/openai/codex) (GPT) + [Kimi](https://github.com/MoonshotAI/kimi-cli) (K2), but it's model-agnostic: swap in [Gemini CLI](https://github.com/google-gemini/gemini-cli) or any model via [OpenRouter](https://openrouter.ai). Each is briefed identically and independently; no model sees another's answer until all three are in.
 
 ```
 COUNCIL BRIEF (identical to all three members)

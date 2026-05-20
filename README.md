@@ -31,11 +31,11 @@ These assume you have the relevant CLIs installed (see **Requirements**). They a
 
 - **Breadth search:** any agent with a web-search tool (the method is tool-agnostic; built-in `WebSearch` works).
 - **Depth browsing:** [`browser-harness`](https://github.com/browser-use/browser-harness) + Google Chrome, for reading JS-rendered pages and navigating doc/repo trees structurally. Read-only.
-- **Council (recommended for HEAVY):** three independent model CLIs so failure modes don't correlate. The reference set is:
+- **Council (recommended for HEAVY):** three *independent* model CLIs so their failure modes don't correlate. The method is model-agnostic — what matters is that the three models are genuinely different, not which vendors. The reference set this was built with:
   - **Claude** — [Claude Code](https://claude.com/claude-code) (`claude`)
-  - **Codex** — OpenAI Codex CLI (`codex`)
-  - **Kimi** — Moonshot Kimi CLI (`kimi`)
-  - Any three distinct models work. Edit `scripts/run-council.sh` to match the CLIs you have.
+  - **Codex** — [OpenAI Codex CLI](https://github.com/openai/codex) (`codex`)
+  - **Kimi** — [Moonshot Kimi CLI](https://github.com/MoonshotAI/kimi-cli) (`kimi`)
+  - **Swap freely.** Any terminal-driveable model works as a council member — e.g. [Gemini CLI](https://github.com/google-gemini/gemini-cli) (`gemini`), or [OpenRouter](https://openrouter.ai) to reach almost any model (GPT, Llama, DeepSeek, Qwen, Mistral…) through one endpoint. Edit `scripts/run-council.sh` to match the CLIs you have; the only rule is **three distinct models, briefed independently**.
 
 ## Quick start
 
@@ -55,6 +55,24 @@ cp templates/pre-research-plan.md  my-research/plan.md
 # 5. (HEAVY tier) convene the council on the merged findings
 ./scripts/run-council.sh my-research/findings.md my-research/council-brief.md
 ```
+
+## Credits & acknowledgements
+
+This method stands on tools and prior work by others. Credit where it's due:
+
+**Tools the toolkit drives**
+- [browser-harness](https://github.com/browser-use/browser-harness) by [Browser Use](https://browser-use.com) — the headless-Chrome depth-browsing layer that lets an agent read JS-rendered pages and navigate repo/doc trees. This is what closed the "agents browse worse than humans" gap.
+- [Claude Code](https://claude.com/claude-code) (Anthropic) — reference orchestrator and a council member.
+- [OpenAI Codex CLI](https://github.com/openai/codex) (OpenAI) — council member.
+- [Moonshot Kimi CLI](https://github.com/MoonshotAI/kimi-cli) (Moonshot AI) — council member.
+- [Gemini CLI](https://github.com/google-gemini/gemini-cli) (Google) and [OpenRouter](https://openrouter.ai) — alternative / additional council members.
+
+None of these projects endorse this repo; the integration scripts are thin wrappers and all trademarks belong to their owners.
+
+**Ideas the method is built on** (see full list in [`METHOD.md`](METHOD.md#sources))
+- Anthropic Engineering — *How We Built Our Multi-Agent Research System* (the fan-out / orchestrator pattern).
+- *Deep Research Agents: A Systematic Examination and Roadmap* (arXiv 2506.18096) and *Deep Research: A Survey of Autonomous Research Agents* (arXiv 2508.12752).
+- OSINT investigation practice and structured-analytic-technique literature (authority chains, triangulation, source tiering).
 
 ## License
 
