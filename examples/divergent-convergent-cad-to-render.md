@@ -92,6 +92,8 @@ The route nobody had named at the start of the loop: **deterministically extrude
 
 This was assemblable from MIT-licensed parts, had no identified prior art, and required no ODA SDK or manual modeling step.
 
+**Loop iteration note (METHOD.md §1.6 — loop discipline):** the C pass here happened to produce three survivors on the first cycle, which were strong enough to promote directly to R2. In practice the C pass can request a second D cycle. For example: if Agent F3 had returned "plan-view conditioning is incompatible with the perspective required" (instead of "MED, noted constraint"), that invalidated assumption would go back to the divergent agent — which might then generate a new bridge ("project the plan-view linework through a virtual camera before handing to ControlNet"). The orchestrator would then dispatch a new round of feasibility probes on that bridge. The D→C notation is a cycle label, not a one-shot label. Iterate until all bridges either survive to R2 or are logged and rejected.
+
 ---
 
 ## Why keyword search wouldn't have found this
