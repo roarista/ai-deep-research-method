@@ -96,6 +96,12 @@ Output: a ranked set of strands to research deeply (R2), each already grounded a
 
 **Per-junction loop:** R0 grounding (broad, shallow) → D (divergent, exploratory probes) → C (convergent, feasibility probes) → R2 (deep HEAVY-tier research on survivors) → synthesis + council. Research appears three times with three jobs: grounding makes divergence real, feasibility-probing drives convergence, deep verification closes it.
 
+**Loop discipline (refinement in active use).** The D→C exchange is an **iterated generate↔evaluate cycle**, not two one-shot passes. After the convergent agent scores the first round of bridges, it may find that new grounding data — a feasibility probe that returned a positive result, or one that invalidated an assumption — is enough to warrant a second D cycle. The orchestrator sends the new grounding back to the divergent agent, which generates another round of bridges informed by what was learned. The loop continues until either (a) no bridge survives feasibility screening, or (b) survivors are strong enough to promote to R2.
+
+This pattern mirrors two independently described models of creative cognition. The **dual-network model** (neuroscience, Fox et al.) posits a dynamic switch between a generative network (default-mode, unconstrained association) and an evaluative network (executive control, feasibility and fit); breakthroughs require both networks active in alternation, not sequentially once. The **Geneplore model** (Finke, Ward, Smith) formalizes this as: Generate preinventive structures → Explore/evaluate constraints → Generate refined structures → repeat. The D→C loop in this method is that cycle applied to research.
+
+A useful framing for where in the loop you are: **Diamond 1 reframes the *problem*** ("what are we not even considering? are we solving the right thing?"); **Diamond 2 explores *solutions*** to the reframed problem. If the C pass keeps rejecting all bridges, suspect you're still in Diamond 1 — the problem description may need another D pass before solutions become findable.
+
 ## 1.7 Research orchestration — request-and-dispatch, results to disk
 
 Thinkers don't spawn agents and don't run deep research inline — they **emit research requests**; the orchestrator (depth 0) dispatches a clean-context research agent per request, in parallel where possible, and routes the answer back.
